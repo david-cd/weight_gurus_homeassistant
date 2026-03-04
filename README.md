@@ -1,3 +1,7 @@
+> ⚠️ **Archived Repository**  
+> This repository has been archived and is no longer maintained.  
+> I now use **[openScale](https://github.com/oliexdev/openScale)** together with **[openScale-sync](https://github.com/oliexdev/openScale-sync)** instead.
+
 # weight_gurus_homeassistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
