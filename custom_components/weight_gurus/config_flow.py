@@ -1,34 +1,35 @@
 """weight_gurus configuration flow."""
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Dict
+from typing import Any
 
 import voluptuous as vol
-from homeassistant import config_entries
-from homeassistant.config_entries import ConfigEntry, OptionsFlow
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
 from homeassistant.core import callback
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .api import WeightGurusApiClient
 from .const import DOMAIN, PLATFORMS
 
 
-class WeightGurusFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
+class WeightGurusFlowHandler(ConfigFlow, domain=DOMAIN):
     """Handle a config flow."""
 
     VERSION = 1
-    CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
     def __init__(self) -> None:
         """Initialize."""
         self._errors: dict = {}
 
     async def async_step_user(
-        self, user_input: Dict[str, str] | None = None
-    ) -> FlowResult:
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
         """Handle a flow initiated by the user."""
         self._errors = {}
 
@@ -55,11 +56,11 @@ class WeightGurusFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
-        return WeightGurusOptionsFlowHandler(config_entry)
+        return WeightGurusOptionsFlowHandler()
 
     async def _show_config_form(
-        self, user_input: Dict[str, str] | None = None
-    ) -> OptionsFlow:  # pylint: disable=unused-argument
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
         """Show the configuration form to edit location data."""
         return self.async_show_form(
             step_id="user",
@@ -84,40 +85,28 @@ class WeightGurusFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return False
 
 
-@dataclass
-class WeightGurusOptionsFlowHandler(config_entries.OptionsFlow):
+class WeightGurusOptionsFlowHandler(OptionsFlow):
     """Handle a option flow."""
-
-    config_entry: ConfigEntry
-
-    def __post_init__(self) -> None:
-        """Initialize."""
-        self.options = dict(self.config_entry.options)
 
     async def async_step_init(
         self, user_input: dict | None = None
-    ) -> FlowResult:  # pylint: disable=unused-argument
+    ) -> ConfigFlowResult:
         """Handle options flow."""
         return await self.async_step_user()
 
-    async def async_step_user(self, user_input: dict | None = None) -> FlowResult:
+    async def async_step_user(self, user_input: dict | None = None) -> ConfigFlowResult:
         """Handle a flow initiated by the user."""
         if user_input is not None:
-            self.options.update(user_input)
-            return await self._update_options()
+            return self.async_create_entry(
+                title=self.config_entry.data.get(CONF_EMAIL), data=user_input
+            )
 
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(x, default=self.options.get(x, True)): bool
+                    vol.Required(x, default=self.config_entry.options.get(x, True)): bool
                     for x in sorted(PLATFORMS)
                 }
             ),
-        )
-
-    async def _update_options(self) -> FlowResult:
-        """Update options."""
-        return self.async_create_entry(
-            title=self.config_entry.data.get(CONF_EMAIL), data=self.options
         )

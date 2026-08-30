@@ -3,7 +3,6 @@ import asyncio
 import socket
 
 import aiohttp
-import async_timeout
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
 
 from .const import ATTR_ENTRY_TIMESTAMP, ATTR_KEYS, LOGGER
@@ -16,7 +15,6 @@ class ApiClientException(Exception):
 
 
 class WeightGurusApiClient:
-    # TODO: refactor this class so functions live in appropriate method subnodes
     def __init__(
         self, email: str, password: str, session: aiohttp.ClientSession
     ) -> None:
@@ -45,7 +43,6 @@ class WeightGurusApiClient:
 
     async def async_get_token_and_save_account_dict(self) -> str:
         """Get account access token and save account dict."""
-        # TODO: check self._token_expires_at before requesting new token (but this might not be a good idea if goalType, goalWeight, and initialWeight change frequently)
         account_credentials = {CONF_EMAIL: self._email, CONF_PASSWORD: self._password}
         account_login_response = await self._session.post(
             f"https://api.weightgurus.com/v3/account/login", data=account_credentials
@@ -85,7 +82,7 @@ class WeightGurusApiClient:
     ) -> dict:
         """API wrapper."""
         try:
-            async with async_timeout.timeout(TIMEOUT):
+            async with asyncio.timeout(TIMEOUT):
                 if method == "get":
                     response = await self._session.get(url, headers=headers)
                     return await response.json()
