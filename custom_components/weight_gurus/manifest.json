@@ -1,11 +1,11 @@
 {
   "domain": "weight_gurus",
   "name": "Weight Gurus",
-  "codeowners": ["@jcgoette"],
+  "codeowners": ["@david-cd"],
   "config_flow": true,
-  "documentation": "https://github.com/jcgoette/weight_gurus_homeassistant",
+  "documentation": "https://github.com/david-cd/weight_gurus_homeassistant",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/jcgoette/weight_gurus_homeassistant/issues",
+  "issue_tracker": "https://github.com/david-cd/weight_gurus_homeassistant/issues",
   "requirements": [],
-  "version": "2.0.3"
+  "version": "2.1.0"
 }
