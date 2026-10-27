@@ -1,6 +1,6 @@
 > **Maintained fork.** The original [jcgoette/weight_gurus_homeassistant](https://github.com/jcgoette/weight_gurus_homeassistant) was archived in March 2026. I use this integration every day with an AccuCheck Verve 0412 scale and plan to keep it working with current Home Assistant releases. Issues and pull requests are welcome here.
 >
-> If you have the Bluetooth Weight Gurus 0376 scale, the original author's recommendation of [openScale](https://github.com/oliexdev/openScale) with [openScale-sync](https://github.com/oliexdev/openScale-sync) (local, no cloud) may suit you better. Wi-Fi models such as the 0412 sync only to the Weight Gurus cloud, which is what this integration reads.
+> This integration reads your measurements from the Weight Gurus cloud. Scales with Wi-Fi, such as the 0412, upload there on their own, so no phone is involved. If you would rather keep everything local over Bluetooth, the original author now uses [openScale](https://github.com/oliexdev/openScale) with [openScale-sync](https://github.com/oliexdev/openScale-sync); at the time of writing openScale lists the Weight Gurus 0376 as supported and other models are untested.
 
 # weight_gurus_homeassistant
 
