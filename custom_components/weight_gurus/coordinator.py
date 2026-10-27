@@ -16,7 +16,9 @@ class WeightGurusDataUpdateCoordinator(DataUpdateCoordinator):
 
     config_entry: ConfigEntry
 
-    def __init__(self, hass: HomeAssistant, api: WeightGurusApiClient) -> None:
+    def __init__(
+        self, hass: HomeAssistant, config_entry: ConfigEntry, api: WeightGurusApiClient
+    ) -> None:
         """Initialize the data update coordinator."""
         self.api = api
         self.platforms: list[str] = []
@@ -24,6 +26,7 @@ class WeightGurusDataUpdateCoordinator(DataUpdateCoordinator):
         super().__init__(
             hass,
             logger=LOGGER,
+            config_entry=config_entry,
             name=DOMAIN,
             update_interval=DATA_COORDINATOR_UPDATE_INTERVAL,
         )
